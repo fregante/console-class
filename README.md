@@ -82,13 +82,13 @@ console.table(arrayOfSomething);
 // my-lib.js
 import Console from 'console-class';
 const console = new Console('My Lib', false); // start disabled
+export { console as logging };
 
 export default function () {
     // do something
     console.log('Hello World!');
 }
 
-export { logging: console };
 ```
 
 ```js
