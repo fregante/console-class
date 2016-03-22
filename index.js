@@ -1,37 +1,32 @@
 'use strict';
-var methods = ['log','info','warn','error'];
-var styleBase = 'border:1px solid;color:';
-
-function Console(id, enabled) {
-	this.id = id;
-	this.enabled = typeof enabled === 'undefined' ? true : enabled;
+var defaultMethods = ['log', 'info', 'warn', 'error', 'trace'];
+var defaultStyle = 'border:1px solid;color:%color%';
+function noop () {}
+function removeMethod(method) {
+	this[method] = noop;
 }
-Console.prototype.style = 'border:1px solid;color:%color%';
-Console.prototype.color = false;
-Console.prototype.on = function () { this.enabled = true; };
-Console.prototype.off = function () { this.enabled = false; };
-Console.prototype.addMethod = function (methodName) {
-	this[methodName] = function () {
-		if (!this.enabled) {
-			return;
-		}
-		var args = Array.prototype.slice.call(arguments);
-		if (this.color && methodName !== 'error') {
-			args.unshift('%c ' + this.id + ' ', styleBase.replace('%color%', this.color));
-		} else if (typeof args[0] === 'string') {
-			// keep support for colored logs in the second argument if the first one is a string
-			args[0] = this.id + ': ' + args[0];
-		} else {
-			args.unshift(this.id + ':');
-		}
-
-		console[methodName].apply(console, args);
-	};
+function addMethod(method) {
+	if (this.style && method !== 'error') {
+		this[method] = console[method].bind(console, '%c ' + this.id + ' ', this.style);
+	} else {
+		this[method] = console[method].bind(console, this.id + ':');
+	}
+}
+function Console(id, opts) {
+	opts = opts || {};
+	this.id = id;
+	this.color = opts.color || false;
+	this.style = opts.style || defaultStyle.replace('%color%', this.color);
+	this.methods = defaultMethods.concat(opts.methods || []);
+	this.on();
+}
+Console.prototype.on = function () {
+	this.methods.forEach(addMethod, this);
+	return this;
 };
-
-// generate common methods to prototype
-methods.forEach(function (methodName) {
-	Console.prototype.addMethod(methodName);
-});
+Console.prototype.off = function () {
+	this.methods.forEach(removeMethod, this);
+	return this;
+};
 
 module.exports = Console;

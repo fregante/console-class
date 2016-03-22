@@ -22,24 +22,26 @@ console.log('Loading');
 ### Toggle all logging of instance
 
 ```js
-const console = new Console('AJAX', false); //FALSE means start disabled
+const console = new Console('AJAX').off();
 console.info('This will not appear');
 console.on();
 console.info('This will appear');
-console.off();
-console.info('This will not appear');
 ```
 
 ### Custom color or style
 
 ```js
-console.color = '#4feb88';
+const console = new Console('AJAX', {
+    color: '#4feb88'
+}).off();
 ```
 
 
 ```js
-console.style = 'border: 10px solid %color%';
-console.color = '#4feb88'; // only usage if `%color%` appears somewhere in the style
+const console = new Console('AJAX', {
+    style: 'border: 10px solid %color%',
+    color: '#4feb88' // only used if `%color%` appears somewhere in the style
+}).off();
 ```
 
 ### Methods supported
@@ -49,12 +51,16 @@ console.log('Something happened');
 console.info('Something is happening');
 console.warn('Something bad happened');
 console.error('Something really bad happened');
+console.trace('Something happened here');
 ```
 
 But more (that are already supported by the browser) can be added this way, but keep in mind that they might break.
 
 ```js
-console.addMethod('table'); //this likely won't work
+const console = new Console('AJAX', {
+    methods: ['table'] //methods in this array will be added to the above
+    // "table" likely won't work
+}).off();
 ```
 
 If you need to use other incompatible methods, either call them directly on the global console:
@@ -77,23 +83,19 @@ console.table(arrayOfSomething);
 
 ## Usage example for redistributable libraries
 
-
 ```js
 // my-lib.js
 import Console from 'console-class';
-const console = new Console('My Lib', false); // start disabled
-export { console as logging };
+const console = new Console('My Lib').off(); // start disabled
 
-export default function () {
-    // do something
-    console.log('Hello World!');
-}
-
+function doSomething () { console.log('Hello World!'); }
+doSomething.logging = console;
+export default doSomething;
 ```
 
 ```js
 // usage.js
-import myLib = 'my-lib';
+import myLib from 'my-lib';
 
 myLib();
 // no logging
