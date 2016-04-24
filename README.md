@@ -105,11 +105,17 @@ myLib();
 // [My Lib] Hello World!
 ```
 
+## Toggle multiple sub-consoles
 
+If you depend on a library that itself exports a `console` with `.on()` and `.off()`, declare that in your Console definition so that library's `console` will be toggled together with yours:
 
-
-
-
-
-
-
+```js
+// my-lib.js
+import someLibrary from 'some-library';
+import Console from 'console-class';
+const console = new Console('My Lib', {
+    sub: [
+        someLibrary.logging
+    ]
+}).off(); // start disabled and disable all the ones in `sub` too
+```

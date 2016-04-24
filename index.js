@@ -1,7 +1,7 @@
 'use strict';
 var defaultMethods = ['log', 'info', 'warn', 'error', 'trace'];
 var defaultStyle = 'border:1px solid;color:%color%';
-function noop () {}
+function noop() {}
 function removeMethod(method) {
 	this[method] = noop;
 }
@@ -18,14 +18,21 @@ function Console(id, opts) {
 	this.color = opts.color || false;
 	this.style = opts.style || defaultStyle.replace('%color%', this.color);
 	this.methods = defaultMethods.concat(opts.methods || []);
+	this.sub = opts.sub || [];
 	this.on();
 }
 Console.prototype.on = function () {
 	this.methods.forEach(addMethod, this);
+	this.sub.forEach(function (sub) {
+		sub.on();
+	});
 	return this;
 };
 Console.prototype.off = function () {
 	this.methods.forEach(removeMethod, this);
+	this.sub.forEach(function (sub) {
+		sub.off();
+	});
 	return this;
 };
 

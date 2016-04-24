@@ -1,6 +1,6 @@
 {
   "name": "console-class",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Get yourself a light, togglable, namespaced and colored console.log in the browser",
   "main": "index.js",
   "author": "Federico Brigante <npm@bfred.it> (https://twitter.com/bfred_it)",
