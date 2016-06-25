@@ -15,8 +15,7 @@ function addMethod(method) {
 function Console(id, opts) {
 	opts = opts || {};
 	this.id = id;
-	this.color = opts.color || false;
-	this.style = opts.style || defaultStyle.replace('%color%', this.color);
+	this.style = opts.style || defaultStyle.replace('%color%', opts.color);
 	this.methods = defaultMethods.concat(opts.methods || []);
 	this.sub = opts.sub || [];
 	this.on();
