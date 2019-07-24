@@ -2,6 +2,7 @@
   "name": "console-class",
   "version": "2.1.0",
   "description": "Get yourself a light, togglable, namespaced and colored console.log in the browser",
-  "author": "Federico Brigante <npm@bfred.it> (https://twitter.com/bfred_it)",
-  "license": "MIT"
+  "repository": "fregante/console-class",
+  "license": "MIT",
+  "author": "Federico Brigante <opensource@bfred.it> (bfred.it)"
 }
